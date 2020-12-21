@@ -20,10 +20,11 @@ int lcm(int a, int b);
 
 int verifyMethod(const char* method);
 
-/// Struct to represent a task
+/// Struct to represent a task p = period c = computational time d = absolute
+/// deadlien rd = relative deadline
 typedef struct {
   int id;
-  float p, c, d;
+  float p, c, d, rd;
 } task;
 
 void printtasks(std::vector<task> tasks);

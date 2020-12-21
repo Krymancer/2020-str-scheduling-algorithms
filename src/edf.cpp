@@ -23,7 +23,7 @@ bool edf(std::vector<task> tasks) {
 }
 
 struct Comparator {
-  bool operator()(const task& t1, const task& t2) { return t2.d < t1.d; }
+  bool operator()(const task& t1, const task& t2) { return t2.rd < t1.rd; }
 };
 
 bool isEDFSchedulable(std::vector<task> tasks) {

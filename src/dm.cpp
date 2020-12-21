@@ -49,14 +49,14 @@ bool isDMSchedulable(std::vector<task> tasks) {
     for (int j = 0; j < n; j++) {
       if ((i % int(tasks[j].p)) == 0) {
         task newtask = tasks[j];
-        newtask.d += i;
+        newtask.rd = newtask.d + i;
         qeue.push(newtask);
       }
     }
 
     if (!qeue.empty()) {
       task task = qeue.top();
-      if (task.d <= i) {
+      if (task.rd <= i) {
         return false;  // Deadline reached, not schedulable
       }
 
