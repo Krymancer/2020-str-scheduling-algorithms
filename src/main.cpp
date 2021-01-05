@@ -4,7 +4,7 @@ std::vector<task> tasks;
 std::ifstream input;
 
 int main(const int argc, const char** argv) {
-  if (argc != 3) {
+  if (argc > 4 || argc < 3) {
     std::cout << "Usage: ./app input.file method" << std::endl
               << "Methods:" << std::endl
               << "rm - Rate Monotonic" << std::endl
@@ -15,7 +15,7 @@ int main(const int argc, const char** argv) {
 
   input.open(argv[1]);
   int i = 0;
-  float p, c, d;
+  int p, c, d;
 
   if (!input) {
     std::cerr << "Unable to open file" << std::endl;
@@ -28,9 +28,12 @@ int main(const int argc, const char** argv) {
       iss >> p >> c >> d;
 
       task t;
-      t.c = c;  // Execution Time
-      t.p = p;  // Period
-      t.d = d;  // Deadline
+      t.c = c;   // Execution Time
+      t.p = p;   // Period
+      t.d = d;   // Deadline
+      t.rd = d;  // Relative deadline
+      t.start = 0;
+      t.end = 0;
       t.id = i;
       tasks.push_back(t);
       i++;
@@ -39,15 +42,22 @@ int main(const int argc, const char** argv) {
 
   int method = verifyMethod(argv[2]);
 
+  int time = -1;
+  if (argc == 4) {
+    time = atoi(argv[3]);
+  }
+
   switch (method) {
     case RM:
-      std::cout << (rm(tasks) ? "Schedulable" : "Not schedulable") << std::endl;
+      std::cout << (rm(tasks, time) ? "Schedulable" : "Not schedulable")
+                << std::endl;
       break;
     case DM:
-      std::cout << (dm(tasks) ? "Schedulable" : "Not schedulable") << std::endl;
+      std::cout << (dm(tasks, time) ? "Schedulable" : "Not schedulable")
+                << std::endl;
       break;
     case EDF:
-      std::cout << (edf(tasks) ? "Schedulable" : "Not schedulable")
+      std::cout << (edf(tasks, time) ? "Schedulable" : "Not schedulable")
                 << std::endl;
       break;
     default:

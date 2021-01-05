@@ -3,5 +3,4 @@
 #include "util.hpp"
 #include <vector>
 
-bool dm(std::vector<task> tasks);
-bool isDMSchedulable(std::vector<task> tasks);
+bool dm(std::vector<task> tasks, int time);

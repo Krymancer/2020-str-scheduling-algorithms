@@ -7,5 +7,4 @@
 #include <queue>
 #include <vector>
 
-bool rm(std::vector<task> tasks);
-bool isRMSchedulable(std::vector<task> tasks);
+bool rm(std::vector<task> tasks, int time);
