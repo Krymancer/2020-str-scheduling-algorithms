@@ -1,5 +1,7 @@
 #include "util.hpp"
 
+#define DEBUG 0
+
 int gcd(int a, int b) {
   for (;;) {
     if (a == 0) return b;
@@ -76,7 +78,7 @@ void drawGraph(std::vector<int> schedule, int numberOfTasks) {
   std::cout << "\n" << std::endl;  // Separator to aesthetics
 }
 
-bool isScheduable(std::vector<task> tasks, functioncall priority) {
+bool isScheduable(std::vector<task> tasks, functioncall priority, int time) {
   int n = tasks.size();
   int periods[n];
 
@@ -87,15 +89,20 @@ bool isScheduable(std::vector<task> tasks, functioncall priority) {
     periods[i] = tasks[i].p;
   }
 
-  int mmc = findlcm(periods, tasks.size());
+  int period = findlcm(periods, tasks.size());
+  if (time != -1) period = time;
 
-  for (int i = 0; i < mmc; i++) {  // Check for new tasks to add in queue
+  for (int i = 0; i < period; i++) {  // Check for new tasks to add in queue
     for (task t : tasks) {
       if (i % t.p == 0) {  // Task arrived, time = task period
         t.rd = t.d + i;    // Calculate the relative deadline
         t.start = i;
-        t.end = t.start + t.c - 1;
+        t.end = t.c;
         queue.push_back(t);
+        if (DEBUG) {
+          std::cout << "At time: " << i << " added ";
+          printtask(t);
+        }
       }
     }
 
@@ -103,22 +110,32 @@ bool isScheduable(std::vector<task> tasks, functioncall priority) {
 
     for (task t : queue) {  // Check for deadlines
       if (t.rd <= i) {      // Deadline reached, scheduled failed
-        std::cout << "Dadline reached! At time: " << i << std::endl;
-        printtask(t);
+        if (DEBUG) {
+          std::cout << "Dadline reached! At time: " << i << " by ";
+          printtask(t);
+        }
         return false;
       }
     }
 
-    if (tasks.size() != 0) {
+    if (queue.size() != 0) {
+      if (DEBUG) {
+        std::cout << "At time: " << i << " computed ";
+        printtask(queue[0]);
+      }
+      queue[0].end--;
       schedule.push_back(queue[0].id);  // Store in the schedule
     } else {
       schedule.push_back(-1);  // No taks has been processed in this time
     }
 
     for (int k = 0; k < queue.size(); k++) {  // Check for finished tasks
-      if (queue[k].end == i) {
-        std::vector<task>::iterator it = queue.begin() + k;
-        queue.erase(it);
+      if (queue[k].end == 0) {
+        if (DEBUG) {
+          std::cout << "At time: " << i << " deleted ";
+          printtask(queue[k]);
+        }
+        queue.erase(queue.begin() + k);
       }
     }
   }

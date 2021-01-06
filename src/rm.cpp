@@ -50,5 +50,5 @@ bool rm(std::vector<task> tasks, int time) {
     }
     std::cout << std::endl;
   }
-  return isScheduable(tasks, lowerPeriod);
+  return isScheduable(tasks, lowerPeriod, time);
 }

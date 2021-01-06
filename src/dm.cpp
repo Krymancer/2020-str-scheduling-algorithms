@@ -24,5 +24,5 @@ bool dm(std::vector<task> tasks, int time) {
 
   std::cout << std::endl;
 
-  return isScheduable(tasks, lowerDeadline);
+  return isScheduable(tasks, lowerDeadline, time);
 }

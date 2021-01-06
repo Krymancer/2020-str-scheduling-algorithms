@@ -38,4 +38,4 @@ void drawGraph(std::vector<int> schedule, int numberOfTasks);
 
 typedef bool (*functioncall)(task t1, task t2);
 
-bool isScheduable(std::vector<task> tasks, functioncall priority);
+bool isScheduable(std::vector<task> tasks, functioncall priority, int time);

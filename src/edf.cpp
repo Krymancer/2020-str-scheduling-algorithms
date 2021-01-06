@@ -21,5 +21,5 @@ bool edf(std::vector<task> tasks, int time) {
               << "The System is not Schedulable" << std::endl;
   }
 
-  return isScheduable(tasks, lowerRealtiveDeadline);
+  return isScheduable(tasks, lowerRealtiveDeadline, time);
 }
