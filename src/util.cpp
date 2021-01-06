@@ -80,7 +80,7 @@ bool isScheduable(std::vector<task> tasks, functioncall priority) {
   int n = tasks.size();
   int periods[n];
 
-  std::vector<task> qeue;     // Vector for the tasks
+  std::vector<task> queue;    // Vector for the tasks
   std::vector<int> schedule;  // Stores the schedule
 
   for (int i = 0; i < tasks.size(); i++) {
@@ -89,20 +89,20 @@ bool isScheduable(std::vector<task> tasks, functioncall priority) {
 
   int mmc = findlcm(periods, tasks.size());
 
-  for (int i = 0; i < mmc; i++) {  // Check for new tasks to add in qeue
+  for (int i = 0; i < mmc; i++) {  // Check for new tasks to add in queue
     for (task t : tasks) {
       if (i % t.p == 0) {  // Task arrived, time = task period
         t.rd = t.d + i;    // Calculate the relative deadline
         t.start = i;
         t.end = t.start + t.c - 1;
-        qeue.push_back(t);
+        queue.push_back(t);
       }
     }
 
-    std::sort(qeue.begin(), qeue.end(), priority);  // Apply the priority
+    std::sort(queue.begin(), queue.end(), priority);  // Apply the priority
 
-    for (task t : qeue) {  // Check for deadlines
-      if (t.rd <= i) {     // Deadline reached, scheduled failed
+    for (task t : queue) {  // Check for deadlines
+      if (t.rd <= i) {      // Deadline reached, scheduled failed
         std::cout << "Dadline reached! At time: " << i << std::endl;
         printtask(t);
         return false;
@@ -110,15 +110,15 @@ bool isScheduable(std::vector<task> tasks, functioncall priority) {
     }
 
     if (tasks.size() != 0) {
-      schedule.push_back(qeue[0].id);  // Store in the schedule
+      schedule.push_back(queue[0].id);  // Store in the schedule
     } else {
       schedule.push_back(-1);  // No taks has been processed in this time
     }
 
-    for (int k = 0; k < qeue.size(); k++) {  // Check for finished tasks
-      if (qeue[k].end == i) {
-        std::vector<task>::iterator it = qeue.begin() + k;
-        qeue.erase(it);
+    for (int k = 0; k < queue.size(); k++) {  // Check for finished tasks
+      if (queue[k].end == i) {
+        std::vector<task>::iterator it = queue.begin() + k;
+        queue.erase(it);
       }
     }
   }
